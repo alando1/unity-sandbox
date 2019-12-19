@@ -20,9 +20,9 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.3745534, g: 0.46544665, b: 0.52461874, a: 1}
-  m_AmbientEquatorColor: {r: 0.48113292, g: 0.4410458, b: 0.43773425, a: 1}
-  m_AmbientGroundColor: {r: 0.658988, g: 0.5882817, b: 0.43801072, a: 1}
+  m_AmbientSkyColor: {r: 0.24255732, g: 0.51899225, b: 0.6989532, a: 1}
+  m_AmbientEquatorColor: {r: 0.5907146, g: 0.5008176, b: 0.49875128, a: 1}
+  m_AmbientGroundColor: {r: 0.72336483, g: 0.63640726, b: 0.39552516, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
@@ -20701,7 +20701,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   ambientIntensity: 1.25
   period: 15
-  current: 0.15555556
+  current: 0.47309327
 --- !u!1 &1863239305
 GameObject:
   m_ObjectHideFlags: 0
@@ -23628,7 +23628,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1003915057}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 147.5, z: 0}
+  m_LocalPosition: {x: -294.82, y: 147.5, z: -311.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 43006584}
