@@ -130,12 +130,16 @@ public class Movement : MonoBehaviour
     #region Flight
     if (Fly)
     {
+      if (isJumping)
+        isJumping = false;
+
       if (rig.useGravity)
         rig.useGravity = false;
 
       if (Input.GetButton("Sprint"))
         transform.position += Camera.transform.forward * flyMultiplier * Time.deltaTime;
     }
+    #endregion
     else
     {
       if (!rig.useGravity)
@@ -164,7 +168,6 @@ public class Movement : MonoBehaviour
 
       #endregion
     }
-    #endregion
 
   }
 
