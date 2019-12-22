@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
   private bool onGround;
   private float initJumpHeight;
   private bool isJumping;
-  private float elapsedJumpTime;
+  //private float elapsedJumpTime;
   private float flyMultiplier;
   private float prevHeight;
   public LayerMask groundLayer;
@@ -93,7 +93,7 @@ public class Movement : MonoBehaviour
     // initialize variables
     mPlayerState = State.onGround;
     aimWeight       = 0.0f;
-    elapsedJumpTime = 0.0f;
+    //elapsedJumpTime = 0.0f;
     flyMultiplier   = 50.0f;
     deltaPosition = new Vector3(0f, 0f, 0f);
     debugJoystick = new Vector2(0f, 0f);
