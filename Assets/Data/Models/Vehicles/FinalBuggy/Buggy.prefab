@@ -1494,7 +1494,7 @@ MonoBehaviour:
   lowPitchMin: 1
   lowPitchMax: 5
   highPitchMultiplier: 0.25
-  maxRolloffDistance: 500
+  maxRolloffDistance: 50
   dopplerLevel: 1
   useDoppler: 1
 --- !u!135 &135808890576861776

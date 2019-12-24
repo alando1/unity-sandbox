@@ -18,6 +18,7 @@ public class InputController : MonoBehaviour
   private bool mDebug;
   private bool mAutoRun;
   private bool mIsAiming;
+  private bool mAimingToggle;
 
   // mouse input
   private bool mFpsView;
@@ -69,6 +70,7 @@ public class InputController : MonoBehaviour
   public bool AutoRun     { get { return mAutoRun; } }
   public bool IsAiming    { get { return mIsAiming; } }
   public bool ResetCam    { get { return mResetCam; } set { mResetCam = value; } }
+  public bool AimingToggle { get { return mAimingToggle; } set { mAimingToggle = value; } }
 
   public GameObject Player { get { return this.gameObject; }  }
   #endregion

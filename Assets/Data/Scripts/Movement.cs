@@ -73,7 +73,7 @@ public class Movement : MonoBehaviour
 
   private float MouseHorizontal   { get { return GetComponent<InputController>().MouseHorz;          } }
   private bool Paused             { get { return pauseMenu.GetComponent<PauseMenu>().Paused;         } }
-  public bool IsAiming            { get { return GetComponent<InputController>().IsAiming;           } }
+  public bool IsAiming            { get { return (GetComponent<InputController>().IsAiming || AutoRun);           } }
 
   /// <summary>Current state of the player.</summary>
   public State PlayerState
