@@ -88,6 +88,8 @@ public class Movement : MonoBehaviour
 
   void Start()
   {
+    Application.targetFrameRate = 144;
+
     print("initial velocity needed for a jump of 6ft: " + Utilities.CalculateJumpSpeed(1.8288f, 9.8f));
 
     // initialize variables

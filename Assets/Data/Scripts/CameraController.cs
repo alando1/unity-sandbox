@@ -130,6 +130,7 @@ public class CameraController : MonoBehaviour
       Vector3 newCamPos = rotation * cameraOffset + position;
 
       RaycastHit hit;
+      // change this to sphere cast
       if (Physics.Linecast(position, newCamPos, out hit))
       {
         cameraOffset.z = -hit.distance;

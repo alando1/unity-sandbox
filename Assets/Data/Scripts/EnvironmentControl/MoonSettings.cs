@@ -10,18 +10,16 @@ public class MoonSettings : MonoBehaviour {
   [Range(1.0F, 10000.0F)]
   public float size;
 
-  [Header("Satellites")]
-  public int numberOfMoons;
-  public int[] sizes;
+  //private Vector3 axisOfRotation;
 
-	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+  {
+    //axisOfRotation = new Vector3(1F, 0F, 0F);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-    transform.localPosition = transform.parent.localPosition + new Vector3(0, 0, distance);
-    transform.localScale = new Vector3(size, size, size);
+	void Update ()
+  {
+    //transform.localPosition = transform.parent.localPosition + new Vector3(0, 0, distance);
+    //transform.localScale = new Vector3(size, size, size);
 	}
 }
