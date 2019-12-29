@@ -44,12 +44,17 @@ public class PauseMenu : MonoBehaviour
   {
     // gui with current mapped inputs for different states
     // Make controls mappable/check for conflicts
-    Debug.Log("Controls ...");
+    Debug.Log("Control Options");
   }
 
-  public void Display()
+  public void Video()
   {
     Debug.Log("Display Options.");
+  }
+
+  public void Audio()
+  {
+    Debug.Log("Audio Options.");
   }
 
   public void Pause()
@@ -70,6 +75,6 @@ public class PauseMenu : MonoBehaviour
 
   private void playMenuSound()
   {
-    //onButtonSound.Play();
+    onButtonSound.Play();
   }
 }
