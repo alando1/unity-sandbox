@@ -24,13 +24,11 @@ public class TimeOfDay : MonoBehaviour
   public string timeOfDay;
 
   private GameObject pauseMenu;
-  //private Vector3 axisOfRotation;
   private static readonly int secondsPerDay = 86400;
 
 	void Start ()
   {
     pauseMenu = GameObject.Find("Pause Menu Canvas");
-    //axisOfRotation = new Vector3(1F, 0F, 0F);
     currentAngle = 0F;
     hour = 0;
     min = 0;
@@ -90,10 +88,6 @@ public class TimeOfDay : MonoBehaviour
     hour = ts.Hours;
     min = ts.Minutes;
     sec = ts.Seconds;
-
-    //hour = currentTimeInSeconds / 3600;
-    //min = currentTimeInSeconds / 60;
-    //sec = currentTimeInSeconds - hour * 3600 - min * 60;
     timeOfDay = string.Format("{0}:{1}:{2}", hour, min, sec);
   }
 
@@ -114,9 +108,6 @@ public class TimeOfDay : MonoBehaviour
     position = rotation * offset + position;
     Moon.position = position;
     Moon.rotation = rotation;
-
-    //Sun.RotateAround(Vector3.zero, axisOfRotation, deltaAngle);
-    //Moon.RotateAround(Vector3.zero, axisOfRotation, deltaAngle);
 
     Sun.LookAt(Vector3.zero);
     Moon.LookAt(Vector3.zero);
