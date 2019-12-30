@@ -18,12 +18,12 @@ public class TimeOfDay : MonoBehaviour
   public bool pauseTime;
 
   [Header("Day Settings")]
-  public Transform Sun;
+  public GameObject Sun;
   public float sunDistance;
   public Material daySkybox;
 
   [Header("Night Settings")]
-  public Transform Moon;
+  public GameObject Moon;
   public float moonDistance;
   public Material nightSkybox;
 
@@ -43,6 +43,9 @@ public class TimeOfDay : MonoBehaviour
     min = 0;
     sec = 0;
     currentSky = Sky.night;
+
+    Sun.SetActive(false);
+    RenderSettings.sun = null;
   }
 
   void Update ()
@@ -91,23 +94,21 @@ public class TimeOfDay : MonoBehaviour
 
      // sunset around 1800 hours
     // sunrise around 0600 hours
-    if (6 <= hour && hour <= 1800)
+    if (6 <= hour && hour <= 17 && currentSky == Sky.night)
     {
-      if (currentSky == Sky.night)
-      {
-        currentSky = Sky.day;
-        RenderSettings.skybox = daySkybox;
-        DynamicGI.UpdateEnvironment();
-      }
+      currentSky = Sky.day;
+      Sun.SetActive(true);
+      RenderSettings.sun = Sun.GetComponent<Light>();
+      RenderSettings.skybox = daySkybox;
+      DynamicGI.UpdateEnvironment();
     }
-    else
+    else if ((hour < 6 || hour > 17) && currentSky == Sky.day)
     {
-      if (currentSky == Sky.day)
-      {
-        currentSky = Sky.night;
-        RenderSettings.skybox = nightSkybox;
-        DynamicGI.UpdateEnvironment();
-      }
+      currentSky = Sky.night;
+      Sun.SetActive(false);
+      RenderSettings.sun = null;
+      RenderSettings.skybox = nightSkybox;
+      DynamicGI.UpdateEnvironment();
     }
   }
 
@@ -117,18 +118,18 @@ public class TimeOfDay : MonoBehaviour
     Quaternion rotation = Quaternion.Euler(currentAngle + DuskOffset, 0F, 0F);
     Vector3 offset = new Vector3(0, 0, -sunDistance);
     Vector3 position = rotation * offset;
-    Sun.position = position;
-    Sun.rotation = rotation;
+    Sun.transform.position = position;
+    Sun.transform.rotation = rotation;
 
     // moon orientation
     rotation = Quaternion.Euler(currentAngle + DuskOffset, 0F, 0F);
     offset = new Vector3(0, 0, moonDistance);
     position = rotation * offset;
-    Moon.position = position;
-    Moon.rotation = rotation;
+    Moon.transform.position = position;
+    Moon.transform.rotation = rotation;
 
-    Sun.LookAt(Vector3.zero);
-    Moon.LookAt(Vector3.zero);
+    Sun.transform.LookAt(Vector3.zero);
+    Moon.transform.LookAt(Vector3.zero);
   }
 
   void BlendSkyboxes()
