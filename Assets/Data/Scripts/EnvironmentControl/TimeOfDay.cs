@@ -37,7 +37,7 @@ public class TimeOfDay : MonoBehaviour
 
 	void Start ()
   {
-    pauseMenu = GameObject.Find("Pause Menu Canvas");
+    pauseMenu = GameObject.FindGameObjectWithTag("Pause Menu");
     currentAngle = 0F;
     hour = 0;
     min = 0;
@@ -47,7 +47,7 @@ public class TimeOfDay : MonoBehaviour
 
   void Update ()
   {
-    if (!pauseMenu.GetComponent<PauseMenu>().Paused)
+    if (!pauseMenu.GetComponent<PauseMenuControl>().Paused)
     {
       /*
       *    angle    day     min

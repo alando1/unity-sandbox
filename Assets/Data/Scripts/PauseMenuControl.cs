@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenuControl : MonoBehaviour
 {
   private static bool mPaused = false;
   public bool Paused { get { return mPaused; } }
-  public GameObject PauseMenuUI;
+  public GameObject PauseMenu;
+  public GameObject ControlMenu;
+  public GameObject VideoMenu;
+  public GameObject AudioMenu;
   public AudioSource onButtonSound;
   public AudioClip click;
 
   private void Start()
   {
-    PauseMenuUI.SetActive(false);
-    //onButtonSound = GetComponent<AudioSource>();
-    //onButtonSound.clip = click;
+    PauseMenu.SetActive(false);
+    VideoMenu.SetActive(false);
+    AudioMenu.SetActive(false);
+    ControlMenu.SetActive(false);
   }
 
   void Update()
@@ -30,7 +34,10 @@ public class PauseMenu : MonoBehaviour
 
   public void Resume()
   {
-    PauseMenuUI.SetActive(false);
+    PauseMenu.SetActive(false);
+    ControlMenu.SetActive(false);
+    VideoMenu.SetActive(false);
+    AudioMenu.SetActive(false);
 
     // hide mouse and lock position to center
     Cursor.visible = false;
@@ -44,12 +51,12 @@ public class PauseMenu : MonoBehaviour
   {
     // gui with current mapped inputs for different states
     // Make controls mappable/check for conflicts
-    Debug.Log("Control Options");
+    Debug.Log("Control Options.");
   }
 
   public void Video()
   {
-    Debug.Log("Display Options.");
+    Debug.Log("Video Options.");
   }
 
   public void Audio()
@@ -59,7 +66,7 @@ public class PauseMenu : MonoBehaviour
 
   public void Pause()
   {
-    PauseMenuUI.SetActive(true);
+    PauseMenu.SetActive(true);
     Cursor.visible = true;
     Cursor.lockState = CursorLockMode.None;
     Time.timeScale = 0.0f;

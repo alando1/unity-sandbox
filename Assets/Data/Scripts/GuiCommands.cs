@@ -11,6 +11,7 @@ public class GuiCommands : MonoBehaviour
   public Texture joystickIcon;
   public Vector2 jsScreenOffset;
   public float thumbstickSize = 20;
+  private bool displayDebug = false;
 
   private Animator anim;
 
@@ -69,15 +70,22 @@ public class GuiCommands : MonoBehaviour
 
   private void OnGUI()
   {
-    try
+    if (displayDebug)
     {
-      DisplayCurrentAnimation();
-      DisplayJoystickInfo();
+      try
+      {
+        DisplayCurrentAnimation();
+        DisplayJoystickInfo();
+      }
+      catch (Exception e)
+      {
+        Debug.Log(e.StackTrace);
+      }
     }
-    catch (Exception e)
-    {
-      Debug.Log(e.StackTrace);
-    }
+  }
 
+  public void ToggleDebug()
+  {
+    displayDebug = !displayDebug;
   }
 }

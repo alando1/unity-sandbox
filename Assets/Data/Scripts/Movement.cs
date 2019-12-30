@@ -72,9 +72,21 @@ public class Movement : MonoBehaviour
   private bool Crouch  { get { return GetComponent<InputController>().Crouch;  } }
 
   private float MouseHorizontal   { get { return GetComponent<InputController>().MouseHorz;          } }
-  private bool Paused             { get { return pauseMenu.GetComponent<PauseMenu>().Paused;         } }
   public bool IsAiming            { get { return (GetComponent<InputController>().IsAiming || AutoRun);           } }
-
+  private bool Paused
+  {
+    get
+    {
+      try
+      {
+        return pauseMenu.GetComponent<PauseMenuControl>().Paused;
+      }
+      catch
+      {
+        return false;
+      }
+    }
+  }
   /// <summary>Current state of the player.</summary>
   public State PlayerState
   {
@@ -107,7 +119,7 @@ public class Movement : MonoBehaviour
     Camera = GetComponentInChildren<Camera>();
     anim = GetComponent<Animator>();
     rig = GetComponent<Rigidbody>();
-    pauseMenu = GameObject.Find("Pause Menu Canvas");
+    pauseMenu = GameObject.FindGameObjectWithTag("Pause Menu");
     chest = anim.GetBoneTransform(HumanBodyBones.Chest);
     rig.useGravity = true;
     rig.isKinematic = false;
