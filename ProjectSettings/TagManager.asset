@@ -15,6 +15,7 @@ TagManager:
   - Right Foot
   - Car collider
   - FloorBuild
+  - Pause Menu
   layers:
   - Default
   - TransparentFX

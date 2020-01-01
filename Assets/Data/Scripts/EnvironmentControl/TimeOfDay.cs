@@ -17,6 +17,9 @@ public class TimeOfDay : MonoBehaviour
   public string timeOfDay;
   public bool pauseTime;
 
+  [Range(0,23)]
+  public int startHour;
+
   [Header("Day Settings")]
   public GameObject Sun;
   public float sunDistance;
@@ -39,7 +42,7 @@ public class TimeOfDay : MonoBehaviour
   {
     pauseMenu = GameObject.FindGameObjectWithTag("Pause Menu");
     currentAngle = 0F;
-    hour = 0;
+    hour = startHour;
     min = 0;
     sec = 0;
     currentSky = Sky.night;
