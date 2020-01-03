@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
   public GameObject player;
   public Transform target;
   public Transform firstPersonView;
+  public LayerMask ignoreMask;
+
   public float distance = 2.0f;
   public float xSpeed = 120.0f;
   public float ySpeed = 120.0f;
@@ -39,6 +41,8 @@ public class CameraController : MonoBehaviour
   // Use this for initialization
   void Start()
   {
+    PlayerControl.UpdateCamera += UpdateCamera;
+
     Vector3 angles = transform.eulerAngles;
     x = angles.y;
     y = angles.x;
@@ -46,13 +50,19 @@ public class CameraController : MonoBehaviour
 
   void LateUpdate()
   {
-    var pState = GetComponentInParent<Movement>().PlayerState;
-    switch(pState)
-    {
-      case Movement.State.driving: DrivingCamera(); break;
-      case Movement.State.onGround: GroundCamera(); break;
-      default: break;
-    }
+    //var pState = GetComponentInParent<Movement>().PlayerState;
+    //switch(pState)
+    //{
+    //  case Movement.State.driving: DrivingCamera(); break;
+    //  case Movement.State.onGround: GroundCamera(); break;
+    //  default: break;
+    //}
+    //GroundCamera();
+  }
+
+  public void UpdateCamera()
+  {
+    GroundCamera();
   }
 
   public static float ClampAngle(float angle, float min, float max)
@@ -111,6 +121,7 @@ public class CameraController : MonoBehaviour
       }
     }
   }
+
   private void GroundCamera()
   {
     y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
@@ -127,18 +138,26 @@ public class CameraController : MonoBehaviour
       Quaternion rotation = transform.parent.rotation * Quaternion.Euler(y, 0, 0);
       Vector3 position = transform.parent.position + transform.parent.rotation * shoulderOffset;
       Vector3 cameraOffset = new Vector3(0, 0, -distance);
-      Vector3 newCamPos = rotation * cameraOffset + position;
+      Vector3 newCamPos = position + rotation * cameraOffset;
 
       RaycastHit hit;
-      // change this to sphere cast
-      if (Physics.Linecast(position, newCamPos, out hit))
-      {
-        cameraOffset.z = -hit.distance;
-        newCamPos = rotation * cameraOffset + position;
-      }
+      Vector3 negDistance;
+      Vector3 direction = newCamPos - position;
 
+      if (Physics.SphereCast(position, 0.35f, direction, out hit, distance, ignoreMask))
+      {
+          negDistance = (hit.distance < distanceMin) ?
+                new Vector3(0.0f, 0.0f, -distanceMin) :
+                new Vector3(0.0f, 0.0f, -hit.distance);
+          Debug.Log(hit.collider.name);
+      }
+      else
+        negDistance = new Vector3(0.0f, 0.0f, -distance + 0.35f);
+
+      position = rotation * negDistance + position;
+
+      transform.position = position;
       transform.rotation = rotation;
-      transform.position = newCamPos;
     }
   }
 }

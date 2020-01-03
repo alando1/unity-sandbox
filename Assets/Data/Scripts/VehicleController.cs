@@ -154,7 +154,7 @@ public class VehicleController : MonoBehaviour
 
       // change the player state and trigger the driving animation
       GetComponent<Movement>().PlayerState = Movement.State.driving;
-      Animator.applyRootMotion = false;
+      //Animator.applyRootMotion = false;
       Animator.SetBool("isDriving", true);
     }
   }
@@ -186,7 +186,7 @@ public class VehicleController : MonoBehaviour
 
     // change the player state and trigger the onGround animation
     GetComponent<Movement>().PlayerState = Movement.State.onGround;
-    Animator.applyRootMotion = true;
+    //Animator.applyRootMotion = true;
     Animator.SetBool("isDriving", false);
 
 

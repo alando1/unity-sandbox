@@ -388,3 +388,5 @@ C:\Users\Alan\Desktop\unity-LATEST\unity-sandbox\obj\Debug\UMotionSourceApplicat
 C:\Users\Alan\Desktop\unity-LATEST\unity-sandbox\obj\Debug\UMotionSourceApplication.csproj.CopyComplete
 C:\Users\Alan\Desktop\unity-LATEST\unity-sandbox\obj\Debug\UMotionSourceApplication.dll
 C:\Users\Alan\Desktop\unity-LATEST\unity-sandbox\obj\Debug\UMotionSourceApplication.pdb
+C:\Users\Public\Documents\Unity Projects\unity-sandbox\Temp\bin\Debug\EasyRoads3Dv3.dll
+C:\Users\Public\Documents\Unity Projects\unity-sandbox\Temp\bin\Debug\EasyRoads3Dv3Editor.dll

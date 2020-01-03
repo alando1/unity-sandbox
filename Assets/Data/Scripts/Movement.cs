@@ -71,8 +71,8 @@ public class Movement : MonoBehaviour
   private bool Fly     { get { return GetComponent<InputController>().Fly;     } }
   private bool Crouch  { get { return GetComponent<InputController>().Crouch;  } }
 
-  private float MouseHorizontal   { get { return GetComponent<InputController>().MouseHorz;          } }
-  public bool IsAiming            { get { return (GetComponent<InputController>().IsAiming || AutoRun);           } }
+  private float MouseHorizontal { get { return GetComponent<InputController>().MouseHorz; } }
+  public bool IsAiming          { get { return (GetComponent<InputController>().IsAiming || AutoRun); } }
   private bool Paused
   {
     get
