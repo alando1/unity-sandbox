@@ -1,6 +1,8 @@
 /[Ll]ibrary/
 /[Tt]emp/
 /[Bb]uilds/
+/[Dd]ebug/
+/[Oo]obj/
 
 /Assets/AssetStoreTools*
 
