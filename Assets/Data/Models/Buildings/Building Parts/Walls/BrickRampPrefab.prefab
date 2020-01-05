@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33883391522307290}
   - component: {fileID: 23448070121196150}
   - component: {fileID: 64205119529067962}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4042058011431748}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: BrickRampPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
