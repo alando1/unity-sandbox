@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4113848845044030}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: StoneFloorPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 33785373536814288}
   - component: {fileID: 23839895933695150}
   - component: {fileID: 64560703282055436}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -7,7 +7,8 @@ public class InputController : MonoBehaviour
   #region Variables
 
   // player locomotion
-  private bool mForward;
+  private float mForward;
+  private float mSide;
   private bool mBack;
   private bool mLeft;
   private bool mRight;
@@ -58,13 +59,15 @@ public class InputController : MonoBehaviour
   #endregion
 
   #region Movement Input
-  public bool Forward     { get { return mForward; } }
+  public float Forward { get { return mForward; } }
+  public float Side { get { return mSide; } }
+  //public bool Forward     { get { return mForward; } }
   public bool Back        { get { return mBack;    } }
   public bool Left        { get { return mLeft;    } }
   public bool Right       { get { return mRight;   } }
   public bool Sprint      { get { return mSprint;  } }
   public bool Jump        { get { return mJump;    } }
-  public bool Crouch      { get { return mCrouch;  } }
+  public bool Crouch      { get { return mCrouch;  } set { mCrouch = value; }}
   public bool Fly         { get { return mFly;     } }
   public bool Debug       { get { return mDebug;   } }
   public bool AutoRun     { get { return mAutoRun; } }
@@ -77,11 +80,15 @@ public class InputController : MonoBehaviour
 
   #endregion
 
+  private PlayerControl playerControl;
+
   void Start ()
   {
     Application.targetFrameRate = 60;
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
+
+    playerControl = transform.GetComponent<PlayerControl>();
 
     // initialize mouse data
     mMouseVert = 0.0f;
@@ -99,7 +106,7 @@ public class InputController : MonoBehaviour
     mFrontSideClickDown = false;
 
     // initialize movement data
-    mForward = false;
+    //mForward = false;
     mBack    = false;
     mLeft    = false;
     mRight   = false;
@@ -125,15 +132,19 @@ public class InputController : MonoBehaviour
     mBackSideClickDown= Input.GetMouseButtonDown(3);
     mFrontSideClickDown = Input.GetMouseButtonDown(4);
 
+    // Movement Input
+    mSide    = Input.GetAxis("Horizontal");
+    mForward = Input.GetAxis("Vertical");
+
     mIsAiming = Input.GetButton("Aim");
-    mForward = Input.GetButton("Forward");
+    //mForward = Input.GetButton("Forward");
     mBack    = Input.GetButton("Back");
     mLeft    = Input.GetButton("Left");
     mRight   = Input.GetButton("Right");
     mSprint  = Input.GetButton("Sprint");
     mFly     = Input.GetButtonDown("Fly") ? !mFly : mFly;
     mJump    = Input.GetButtonDown("Jump");
-    mCrouch  = Input.GetButtonDown("Crouch") ? !mCrouch : mCrouch;
+    mCrouch  = Input.GetButtonDown("Crouch") && playerControl.isGrounded ? !mCrouch : mCrouch;
     mDebug = Input.GetButtonDown("CapsLock");// ? !mDebug : mDebug;
     mAutoRun = Input.GetButtonDown("AutoRun") ? !mAutoRun : mAutoRun;
 
