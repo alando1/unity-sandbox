@@ -36,10 +36,7 @@ public class Movement : MonoBehaviour
   private float aimWeight;
   private Transform chest;
 
-
-  public static Action<Vector2> JoyStickGui;
   public static Action<Vector2, string> CurrentAnimationGui;
-
 
   // Components
   private Camera Camera;

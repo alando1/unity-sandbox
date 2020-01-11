@@ -5,17 +5,14 @@ using System;
 
 public class Build : MonoBehaviour
 {
-  //public GameObject[] Ramps;
+  public Transform buildsContainer;
   public GameObject[] Models;
   public List<GameObject> builds;
-  private Transform repo;
   //private Camera cam;
 
   // Use this for initialization
   void Start()
   {
-    repo = GameObject.Find("BuildsRepo").transform;
-    //cam = player.GetComponentInChildren<Camera>();
   }
 
   // Update is called once per frame
@@ -42,13 +39,13 @@ public class Build : MonoBehaviour
 
   void BuildRamp()
   {
-    GameObject ramp = Instantiate(Models[0], Snap(transform), Quaternion.identity, repo);
+    GameObject ramp = Instantiate(Models[0], Snap(transform), Quaternion.identity, buildsContainer);
     builds.Add(ramp);
   }
 
   void BuildWall()
   {
-    GameObject wall = Instantiate(Models[1], Snap(transform), Quaternion.identity, repo);
+    GameObject wall = Instantiate(Models[1], Snap(transform), Quaternion.identity, buildsContainer);
     builds.Add(wall);
   }
 
@@ -58,7 +55,7 @@ public class Build : MonoBehaviour
     //RaycastHit hit;
     //if (Physics.Raycast(ray, out hit, ))
 
-    GameObject floor = Instantiate(Models[2], Snap(transform), Models[2].transform.rotation, repo);
+    GameObject floor = Instantiate(Models[2], Snap(transform), Models[2].transform.rotation, buildsContainer);
     builds.Add(floor);
   }
 

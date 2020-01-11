@@ -12,22 +12,21 @@ public class GuiCommands : MonoBehaviour
   public Vector2 jsScreenOffset;
   public float thumbstickSize = 20;
   private bool displayDebug = false;
+  private Vector2 joystick;
 
   private Animator anim;
 
-  // Use this for initialization
   void Start ()
   {
     anim = GetComponent<Animator>();
+    joystick = Vector2.zero;
   }
-
-  private Vector2 Joystick { get { return GetComponent<Movement>().JoyStick; } }
 	
-	// Update is called once per frame
 	void Update ()
   {
-		
-	}
+    joystick = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+    joystick = joystick.magnitude > 1F ? joystick.normalized : joystick;
+  }
 
   private void DisplayJoystickInfo()
   {
@@ -38,8 +37,8 @@ public class GuiCommands : MonoBehaviour
 
     // scale joystick values to icon size
     float widthOffset = joystickIconSize / 2;
-    Vector2 joystickPos = new Vector2(Utilities.Map(Joystick.x, -1.0f, 1.0f, -widthOffset + 10, widthOffset - 10),
-                                      Utilities.Map(Joystick.y, -1.0f, 1.0f, widthOffset - 10, -widthOffset + 10));
+    Vector2 joystickPos = new Vector2(Utilities.Map(joystick.x, -1.0f, 1.0f, -widthOffset + 10, widthOffset - 10),
+                                      Utilities.Map(joystick.y, -1.0f, 1.0f, widthOffset - 10, -widthOffset + 10));
 
     // find center point of JoyStick Background rectangle
     size = new Vector2(widthOffset, widthOffset);
@@ -52,8 +51,8 @@ public class GuiCommands : MonoBehaviour
     // print raw values to screen
     display = new Rect(jsScreenOffset.x, jsScreenOffset.y + joystickIconSize, 50, 80);
     string debugx, debugy, formatted;
-    debugx = Joystick.x.ToString("F2");
-    debugy = Joystick.y.ToString("F2");
+    debugx = joystick.x.ToString("F2");
+    debugy = joystick.y.ToString("F2");
     formatted = string.Format("x: {0, 5}\ny: {1, 5}", debugx, debugy);
     GUI.Label(display, formatted);
   }

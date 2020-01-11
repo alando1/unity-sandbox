@@ -80,7 +80,7 @@ public class InputController : MonoBehaviour
 
   #endregion
 
-  private PlayerControl playerControl;
+  private PlayerController playerControl;
 
   void Start ()
   {
@@ -88,7 +88,7 @@ public class InputController : MonoBehaviour
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
 
-    playerControl = transform.GetComponent<PlayerControl>();
+    playerControl = transform.GetComponent<PlayerController>();
 
     // initialize mouse data
     mMouseVert = 0.0f;

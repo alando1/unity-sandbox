@@ -2,14 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Vehicles.Car;
 
+[RequireComponent(typeof(PlayerController))]
 public class VehicleController : MonoBehaviour
 {
   public GameObject VehicleContainer;
   private bool playerIsDriving = false;
   private GameObject EnterCarButton;
   private GameObject ExitCarButton;
-  public GameObject ChosenVehicle { get; set; }
+  [SerializeField] public GameObject ChosenVehicle;
   private Animator Animator;
   private Rigidbody Rigidbody;
   private Transform seat;
@@ -112,7 +114,6 @@ public class VehicleController : MonoBehaviour
         EnterCarButton.SetActive(false);
       }
     }
-
   }
 
   void DisplayDrivingGui()
@@ -141,8 +142,9 @@ public class VehicleController : MonoBehaviour
       playerIsDriving = true;
 
       // disable player's rigidbody and colliders
-      Rigidbody.isKinematic = true;
-      SetColliderStates(false);
+      //Rigidbody.isKinematic = true;
+      //SetColliderStates(false);
+      GetComponent<CharacterController>().detectCollisions = false;
 
       // make player a child of the car
       transform.SetParent(ChosenVehicle.transform);
@@ -153,19 +155,25 @@ public class VehicleController : MonoBehaviour
       //playerAnchor = transform;
 
       // change the player state and trigger the driving animation
-      GetComponent<Movement>().PlayerState = Movement.State.driving;
+      GetComponent<PlayerController>().PlayerState = PlayerController.ControlStates.CAR_CONTROL;
       //Animator.applyRootMotion = false;
-      Animator.SetBool("isDriving", true);
+      Animator.SetBool("Driving", true);
     }
   }
 
   void ChangeToOnGround()
   {
+    Debug.Log("Exiting " + ChosenVehicle.name);
+
+    // remove exit car message and change state
+    ExitCarButton.SetActive(false);
+
     playerIsDriving = false;
 
     // enable the player's rigidbody and box colliders
-    Rigidbody.isKinematic = false;
-    SetColliderStates(true);
+    //Rigidbody.isKinematic = false;
+    //SetColliderStates(true);
+    GetComponent<CharacterController>().detectCollisions = true;
 
     // compute left offset
     Vector3 offset = seat.right * -2.0f;
@@ -181,13 +189,14 @@ public class VehicleController : MonoBehaviour
     // kill the engine on driver exit
     if (ChosenVehicle != null)
     {
-      ChosenVehicle.GetComponent<UnityStandardAssets.Vehicles.Car.MyCarUserControl>().OnDriverExit();
+      ChosenVehicle.GetComponent<MyCarUserControl>().OnDriverExit();
+      ChosenVehicle = null;
     }
 
     // change the player state and trigger the onGround animation
-    GetComponent<Movement>().PlayerState = Movement.State.onGround;
+    GetComponent<PlayerController>().PlayerState = PlayerController.ControlStates.GROUND_CONTROL;
     //Animator.applyRootMotion = true;
-    Animator.SetBool("isDriving", false);
+    Animator.SetBool("Driving", false);
 
 
 
@@ -212,10 +221,7 @@ public class VehicleController : MonoBehaviour
         //**************//
         if (Input.GetButtonDown("Action"))
         {
-          // remove exit car message and change state
-          ExitCarButton.SetActive(false);
           ChangeToOnGround();
-          Debug.Log("Exiting " + ChosenVehicle.name);
         }
       }
     }

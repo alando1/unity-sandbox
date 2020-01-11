@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-  public GameObject player;
   public Transform target;
   public Transform firstPersonView;
   public LayerMask ignoreMask;
@@ -18,16 +17,15 @@ public class CameraController : MonoBehaviour
 
   public float distanceMin = .5f;
   public float distanceMax = 15f;
+  public float smoothTime = 0.1f;
 
   [Header("Over the shoulder")]
   public Vector3 shoulderOffset;
+  public Transform shoulderPivot;
+
+  private Vector3 velocity;
 
   #region External Properties
-  private bool ResetCamera
-  {
-    get { return GetComponentInParent<InputController>().ResetCam;  }
-    set { GetComponentInParent<InputController>().ResetCam = value; }
-  }
 
   private bool FirstPersonView
   {
@@ -41,28 +39,20 @@ public class CameraController : MonoBehaviour
   // Use this for initialization
   void Start()
   {
-    PlayerControl.UpdateCamera += UpdateCamera;
-
     Vector3 angles = transform.eulerAngles;
     x = angles.y;
     y = angles.x;
+    velocity = Vector3.zero;
   }
 
   void LateUpdate()
   {
-    //var pState = GetComponentInParent<Movement>().PlayerState;
-    //switch(pState)
-    //{
-    //  case Movement.State.driving: DrivingCamera(); break;
-    //  case Movement.State.onGround: GroundCamera(); break;
-    //  default: break;
-    //}
-    //GroundCamera();
-  }
-
-  public void UpdateCamera()
-  {
-    GroundCamera();
+    switch (GetComponentInParent<PlayerController>().PlayerState)
+    {
+      case PlayerController.ControlStates.GROUND_CONTROL: GroundCamera(); break;
+      case PlayerController.ControlStates.CAR_CONTROL: DrivingCamera(); break;
+      default: break;
+    }
   }
 
   public static float ClampAngle(float angle, float min, float max)
@@ -76,12 +66,7 @@ public class CameraController : MonoBehaviour
 
   private void DrivingCamera()
   {
-    if (GetComponentInParent<InputController>().ResetCam)
-    {
-      x = 0f; y = 0f;
-      GetComponentInParent<InputController>().ResetCam = false;
-    }
-
+    Vector3 currentPosition = transform.position;
     x += Input.GetAxis("Mouse X") * xSpeed * Time.deltaTime;
     y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
     y = ClampAngle(y, yMinLimit, yMaxLimit);
@@ -102,19 +87,21 @@ public class CameraController : MonoBehaviour
         distance = Mathf.Clamp(distance - Input.mouseScrollDelta.y, distanceMin, distanceMax);
 
         RaycastHit hit;
-        Vector3 negDistance;
+        Vector3 desiredOffset = Vector3.zero;
+        float radius = 0.5f;
         Vector3 direction = transform.position - target.position;
-        if (Physics.SphereCast(target.position, 0.35f, direction, out hit, distance))
+        Vector3 offset = new Vector3(0F, 0F, -direction.magnitude);
+        if (Physics.SphereCast(target.position, radius, direction, out hit, distance))
         {
-          negDistance = (hit.distance < distanceMin) ?  
-               new Vector3(0.0f, 0.0f, -distanceMin) : 
-               new Vector3(0.0f, 0.0f, -hit.distance);
+          desiredOffset.z = (hit.distance < distanceMin) ? -distanceMin : -hit.distance;
           //Debug.Log(hit.collider.name);
         }
         else
-          negDistance = new Vector3(0.0f, 0.0f, -distance + 0.35f);
+          desiredOffset.z = -distance;
 
-        Vector3 position = rotation * negDistance + target.position;
+        // smooth offset reposition
+        offset = Vector3.SmoothDamp(offset, desiredOffset, ref velocity, smoothTime);
+        Vector3 position = rotation * offset + target.position;
 
         transform.rotation = rotation;
         transform.position = position;
@@ -135,28 +122,27 @@ public class CameraController : MonoBehaviour
     }
     else
     {
-      Quaternion rotation = transform.parent.rotation * Quaternion.Euler(y, 0, 0);
-      Vector3 position = transform.parent.position + transform.parent.rotation * shoulderOffset;
       Vector3 cameraOffset = new Vector3(0, 0, -distance);
-      Vector3 newCamPos = position + rotation * cameraOffset;
+      Quaternion rotation = transform.parent.rotation * Quaternion.Euler(y, 0, 0);
+      Vector3 desiredCameraPos = shoulderPivot.position + rotation * cameraOffset;
 
+      Vector3 direction = transform.position - shoulderPivot.position;
+      Vector3 offset = new Vector3(0F, 0F, -direction.magnitude);
+      Vector3 desiredOffset = Vector3.zero;
       RaycastHit hit;
-      Vector3 negDistance;
-      Vector3 direction = newCamPos - position;
 
-      if (Physics.SphereCast(position, 0.35f, direction, out hit, distance, ignoreMask))
+      if (Physics.SphereCast(shoulderPivot.position, 0.35f, direction, out hit, distance))
       {
-          negDistance = (hit.distance < distanceMin) ?
-                new Vector3(0.0f, 0.0f, -distanceMin) :
-                new Vector3(0.0f, 0.0f, -hit.distance);
+          desiredOffset.z = (hit.distance < distanceMin) ? -distanceMin : -hit.distance;
           Debug.Log(hit.collider.name);
       }
       else
-        negDistance = new Vector3(0.0f, 0.0f, -distance + 0.35f);
+        desiredOffset.z = -distance;
 
-      position = rotation * negDistance + position;
+      offset = Vector3.SmoothDamp(offset, desiredOffset, ref velocity, smoothTime);
+      desiredCameraPos = rotation * offset + shoulderPivot.position;
 
-      transform.position = position;
+      transform.position = desiredCameraPos;
       transform.rotation = rotation;
     }
   }

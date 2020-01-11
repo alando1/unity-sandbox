@@ -6,12 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(InputController))]
 [RequireComponent(typeof(CharacterController))]
-public class PlayerControl : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
   // Components
   private Animator animator;
-  private CharacterController character;
   private InputController playerInput;
+  private CharacterController character;
 
   // Header sections
   [Header("Ground Contact")]
@@ -25,30 +25,44 @@ public class PlayerControl : MonoBehaviour
   public float jumpHeight = 3f;
   public float gravity = -9.81f;
 
-  public static Action UpdateCamera;
+  [Header("Collider Settings")]
+  public float standingHeight = 1.9F;
+  public float crouchingHeight = 1.4F;
+  public Vector3 crouchingCenter = new Vector3(0F, 0.62F, 0F);
+  public Vector3 standingCenter = new Vector3(0F, 0.97F, 0F);
+
   private Vector3 velocity;
   private Vector2 movement;
+  public Vector2 Joystick { get { return movement; } }
   public bool isGrounded;
   private float deltaY;
-  private float prevY;
 
+  public enum ControlStates { GROUND_CONTROL, CAR_CONTROL };
+  [SerializeField] public ControlStates PlayerState;
 
-  public float standingHeight = 1.9F;
-  private float crouchingHeight = 1.4F;
-  private Vector3 crouchingCenter = new Vector3(0F, 0.62F, 0F);
-  public Vector3 standingCenter = new Vector3(0F, 0.97F, 0F);
 
 	void Start ()
   {
+    PlayerState = ControlStates.GROUND_CONTROL;
+
     animator = GetComponent<Animator>();
-    character = GetComponent<CharacterController>();
     playerInput = GetComponent<InputController>();
+    character = GetComponent<CharacterController>();
     deltaY = 0;
-    prevY = transform.position.y;
 	}
 	
-	void Update ()
+  void Update()
   {
+    switch(PlayerState)
+    {
+      case ControlStates.GROUND_CONTROL: GroundUpdate(); break;
+      default: break;
+    }
+  }
+
+	void GroundUpdate()
+  {
+
     isGrounded = Physics.CheckSphere(groundContact.position, groundDistance, groundMask);
 
     // reset downward velocity when grounded
@@ -99,25 +113,26 @@ public class PlayerControl : MonoBehaviour
     velocity.y += gravity * Time.deltaTime;
     character.Move(velocity * Time.deltaTime);
 
-    UpdateCamera();
     SetAnimations();
 
+    // need to set after animations to avoid skipping jump animation transition
     if (!isGrounded)
     {
       deltaY = velocity.y;
     }
-
-    prevY = transform.position.y;
 	}
 
   void SetAnimations()
   {
-    // movement variables
+    // movement
     animator.SetFloat("Side", movement.x);
     animator.SetFloat("Forward", movement.y);
     animator.SetBool("Crouch", playerInput.Crouch);
     animator.SetBool("Grounded", isGrounded);
+
+    // triggers jump transition
     animator.SetFloat("VelocityY", velocity.y);
+    // triggers jump blending animations
     animator.SetFloat("DeltaY", deltaY);
   }
 
