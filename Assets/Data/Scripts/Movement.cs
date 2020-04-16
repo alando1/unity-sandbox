@@ -132,10 +132,10 @@ public class Movement : MonoBehaviour
   {
     if (!Paused)
     { // replace this with actual animation rotation
-      if (MouseHorizontal != 0)
-      {
-        transform.Rotate(Vector3.up, MouseHorizontal);
-      }
+      //if (MouseHorizontal != 0)
+      //{
+      //  transform.Rotate(Vector3.up, MouseHorizontal);
+      //}
     }
 
     #region Flight

@@ -125,12 +125,13 @@ public class PlayerController : MonoBehaviour
     animator.SetFloat("DeltaY", deltaY);        // triggers jump blending animations
 
     // turning
-    //animator.SetBool("Turning", turning);  // 
     animator.SetFloat("TurnOffset", turnOffset);
     animator.SetBool("Aiming", inputController.IsAiming);
   }
 
-  // rotate player when turn threshold is exceeded
+  /// <summary>
+  /// rotate player when turn threshold is exceeded
+  /// </summary>
   void HandleLookRotation()
   {
     // take the current camera look vector, flatten to XZ plane and normalize;
@@ -144,11 +145,9 @@ public class PlayerController : MonoBehaviour
     // GROUND TURNING
     if (isGrounded)
     {
-      // if starting to move, face camera look vector. need to fix this
+      // if starting to move
       if (moveMag > 0.1F)
       {
-        Vector3 forward = Vector3.RotateTowards(playerLookVector, cameraLookVector, Mathf.Deg2Rad * turnThreshold * Time.deltaTime * turnSpeed, 1F);
-        transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
         turnOffset = 0F;
         turning = false;
       }
@@ -212,25 +211,18 @@ public class PlayerController : MonoBehaviour
   // handle horizontal movement input
   void HandleHorizontalMovement()
   {
-    if(inputController.AutoRun)
+    if(move.magnitude > 0.1f)
     {
-      if (inputController.Forward < -0.1F)
-        inputController.AutoRun = false;
-      else
-      {
-        movement = Vector2.MoveTowards(movement, Vector2.up, Time.deltaTime);
-        movement = movement.magnitude > 1F ? movement.normalized : movement;
-        move = transform.right * movement.x + transform.forward * movement.y;
-        moveMag = move.magnitude;
-      }
+      // take the current camera look vector, flatten to XZ plane and normalize;
+      var cameraLookVector = playerCam.transform.forward;
+      cameraLookVector.y = 0F; cameraLookVector.Normalize();
+      transform.forward = cameraLookVector; 
     }
-    else
-    {
+
       movement = new Vector2(inputController.Side, inputController.Forward);
       movement = movement.magnitude > 1F ? movement.normalized : movement;
       move = transform.right * movement.x + transform.forward * movement.y;
       moveMag = move.magnitude;
-    }
   }
 
   // handle vertical movement input

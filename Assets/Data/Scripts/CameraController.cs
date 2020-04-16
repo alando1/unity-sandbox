@@ -14,11 +14,9 @@ public class CameraController : MonoBehaviour
   public Transform firstPersonView;
   private LayerMask mask;
 
-  private Transform player;
+  public Transform player;
   public float angle;
   public float distance = 2.0f;
-  //public float xSpeed = 120.0f;
-  //public float ySpeed = 120.0f;
   
   public float yMinLimit = -70f;
   public float yMaxLimit = 70f;
@@ -26,6 +24,7 @@ public class CameraController : MonoBehaviour
   public float distanceMin = 1f;
   public float distanceMax = 15f;
   public float smoothTime = 0.1f;
+  public float fpsDistance = 0.35f;
 
   [Header("Over the shoulder")]
   public Vector3 shoulderPivot;
@@ -36,8 +35,11 @@ public class CameraController : MonoBehaviour
   public float TPx = 0.0f;
   public float TPy = 0.0f;
 
+  private Vector3 initial;
+  private Vector3 final;
+
   private Vector3 velocity;
-  private float colliderRadius = 0.5f;
+  private float colliderRadius = 0.05f;
   private PauseMenuControl pause;
 
   #region External Properties
@@ -51,17 +53,12 @@ public class CameraController : MonoBehaviour
   // Use this for initialization
   void Start()
   {
-    player = GameObject.FindGameObjectWithTag("Player").transform;
     vehicleControl = player.GetComponent<VehicleController>();
     playerControl = player.GetComponent<PlayerController>();
     inputControl = player.GetComponent<InputController>();
     animator = player.GetComponent<Animator>();
-
-    Vector3 angles = transform.eulerAngles;
-    x = angles.y;
-    y = angles.x;
-    velocity = Vector3.zero;
     pause = GameObject.FindGameObjectWithTag("Pause Menu").GetComponent<PauseMenuControl>();
+    velocity = Vector3.zero;
 
     int layer = LayerMask.NameToLayer("Player");
     mask = ~(1 << layer);
@@ -93,6 +90,7 @@ public class CameraController : MonoBehaviour
 
   public static float ClampAngle(float angle, float min, float max)
   {
+    Mathf.Repeat(angle, 360F);
     if (angle < -360F)
       angle += 360F;
     else if (angle > 360F)
@@ -141,14 +139,16 @@ public class CameraController : MonoBehaviour
   {
     if (FirstPersonView)
     {
-      // Assign camera position and look direction
-      transform.position = firstPersonView.position;
-      transform.forward = Quaternion.AngleAxis(y, player.transform.right) * player.transform.forward;
+      Quaternion rotation = Quaternion.Euler(y, x, 0F);
+      var position = player.position + new Vector3(0F, shoulderPivot.y, 0F) + rotation * new Vector3(0,0,fpsDistance);
+      transform.position = position;
+      transform.rotation = rotation;
     }
     else
     {
       // Update distance and clamp to min max
-      distance = Mathf.Clamp(distance - Input.mouseScrollDelta.y, distanceMin, distanceMax);
+      //distance = Mathf.Clamp(distance - Input.mouseScrollDelta.y, distanceMin, distanceMax);
+      distance = 2.0f;
 
       // Store global rotation and desired camera offset
       Quaternion rotation = Quaternion.Euler(y, x, 0F);
@@ -157,35 +157,36 @@ public class CameraController : MonoBehaviour
       Quaternion vertRot = Quaternion.Euler(y, 0F, 0F);
 
       // Store initial and final points to create a camera direction
-      Vector3 initial = player.position + horzRot * new Vector3(shoulderPivot.x, shoulderPivot.y, shoulderPivot.z);
-      Vector3 final = initial + rotation * offset;
-      Vector3 direction = horzRot * (final - initial);
-      //direction.Normalize();
+      initial = player.position + horzRot * new Vector3(shoulderPivot.x, shoulderPivot.y, shoulderPivot.z);
+      final = initial + rotation * offset;
+      Vector3 direction = (final - initial);
+      direction.Normalize();
       // Initialize collision output variables
       Vector3 desiredOffset = Vector3.zero;
       RaycastHit hit;
 
-      if (Physics.SphereCast(initial, colliderRadius, direction, out hit, distance, mask))
+      var result = Physics.SphereCast(initial, colliderRadius, direction, out hit, distance, mask);
+      if (result)
       {
-          desiredOffset.z = (hit.distance < distanceMin) ? -distanceMin : -hit.distance;
-          Debug.Log(hit.collider.name);
+        desiredOffset.z = -hit.distance;
+        Debug.Log(hit.collider.name);
       }
       else
         desiredOffset.z = -distance;
 
-      // Smooth camera follow z distance
-      //offset = desiredOffset;// Vector3.SmoothDamp(offset, desiredOffset, ref velocity, smoothTime);
       desiredOffset = rotation * desiredOffset + initial;
 
       // Update camera position and rotation
       transform.position = desiredOffset;
       transform.rotation = rotation;
-      
+
     }
   }
 
   private void OnDrawGizmos()
   {
+    Gizmos.DrawWireCube(initial, new Vector3(0.1f,0.1f,0.1f));
+    Gizmos.DrawWireCube(final, new Vector3(0.1f,0.1f,0.1f));
     Gizmos.DrawWireSphere(transform.position, colliderRadius);
     Debug.DrawRay(transform.position, transform.forward, Color.red);
   }
