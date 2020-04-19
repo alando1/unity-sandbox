@@ -299,16 +299,16 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="EasyRoads3Dv3Editor">
-      <HintPath>C:/Users/Public/Documents/Unity Projects/unity-sandbox/Assets/EasyRoads3D/Editor/EasyRoads3Dv3Editor.dll</HintPath>
+      <HintPath>C:/Users/Public/Documents/Unity_Projects/unity-sandbox/Assets/EasyRoads3D/Editor/EasyRoads3Dv3Editor.dll</HintPath>
     </Reference>
     <Reference Include="EasyRoads3Dv3">
-      <HintPath>C:/Users/Public/Documents/Unity Projects/unity-sandbox/Assets/EasyRoads3D/lib/EasyRoads3Dv3.dll</HintPath>
+      <HintPath>C:/Users/Public/Documents/Unity_Projects/unity-sandbox/Assets/EasyRoads3D/lib/EasyRoads3Dv3.dll</HintPath>
     </Reference>
     <Reference Include="UMotionApplication">
-      <HintPath>C:/Users/Public/Documents/Unity Projects/unity-sandbox/Assets/UMotionEditor/Plugins/Application/UMotionApplication.dll</HintPath>
+      <HintPath>C:/Users/Public/Documents/Unity_Projects/unity-sandbox/Assets/UMotionEditor/Plugins/Application/UMotionApplication.dll</HintPath>
     </Reference>
     <Reference Include="UMotionEditor">
-      <HintPath>C:/Users/Public/Documents/Unity Projects/unity-sandbox/Assets/UMotionEditor/Plugins/Editor/UMotionEditor.dll</HintPath>
+      <HintPath>C:/Users/Public/Documents/Unity_Projects/unity-sandbox/Assets/UMotionEditor/Plugins/Editor/UMotionEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>C:/Users/Alan/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>

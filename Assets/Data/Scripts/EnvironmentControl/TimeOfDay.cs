@@ -109,9 +109,9 @@ public class TimeOfDay : MonoBehaviour
     {
       currentSky = Sky.night;
       Sun.SetActive(false);
-      RenderSettings.sun = null;
-      RenderSettings.skybox = nightSkybox;
-      DynamicGI.UpdateEnvironment();
+      //RenderSettings.sun = null;
+      //RenderSettings.skybox = nightSkybox;
+      //DynamicGI.UpdateEnvironment();
     }
   }
 
